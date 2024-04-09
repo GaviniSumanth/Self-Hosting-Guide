@@ -1,0 +1,95 @@
+// Specifying the ports is unneccessary but it is mentioned so you can change them if needed.
+// This block can be removed and it will not make much difference. 
+{
+	https_port 443
+	http_port 80
+	servers :443 {
+		protocols h3 h2 h1
+	}
+}
+
+// For modifying the headers
+(common) {
+	header {
+		-Server
+		-X-Powered-By
+		X-XSS-Protection "1; mode=block"
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy "no-referrer"
+		Strict-Transport-Security max-age=15768000
+	}
+}
+
+// For logging the requests made to the server
+(logging) {
+	log {
+		output file /var/log/caddy/{args[0]}.access.log
+		format json
+		level INFO
+	}
+}
+
+//------------------------------------------
+// This part is for authelia
+auth.domain.tld {
+	import common
+	import logging catchall
+	reverse_proxy localhost:9091
+}
+
+(secure) {
+	forward_auth {args[0]} localhost:9091 {
+		uri /api/verify?rd=https://auth.domain.tld
+		copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
+		header_up Host {upstream_hostport}
+	}
+}
+//------------------------------------------
+
+// Handle invalid requests
+:443 {
+	import common
+	import logging catchall
+	respond "Access denied" 403 {
+		close
+	}
+}
+
+// Using your certbot certificates
+*.domain.tld {
+	tls /data/certs/fullchain.pem /data/certs/privkey.pem {
+		protocols tls1.3
+	}
+}
+
+// A file server for serving static pages with server side compression and client side caching
+www.domain.tld {
+	import common
+	root * /var/www/
+	file_server
+	encode zstd gzip
+	@assets {
+		path *.webp *.js
+	}
+	@content {
+		not {
+			path *.webp *.js
+		}
+	}
+	header @assets cache-control max-age=31536000
+	header @content cache-control max-age=0
+}
+
+// Reverse proxy examples
+subdomain1.domain.tld {
+	import common
+	import logging catchall
+	reverse_proxy localhost:3000
+}
+
+subdomain2.domain.tld {
+	import common
+	import logging catchall
+	reverse_proxy localhost:4000
+}
