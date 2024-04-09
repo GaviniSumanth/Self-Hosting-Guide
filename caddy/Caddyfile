@@ -1,5 +1,5 @@
-// Specifying the ports is unneccessary but it is mentioned so you can change them if needed.
-// This block can be removed and it will not make much difference. 
+# Specifying the ports is unneccessary but it is mentioned so you can change them if needed.
+# This block can be removed and it will not make much difference. 
 {
 	https_port 443
 	http_port 80
@@ -8,7 +8,7 @@
 	}
 }
 
-// For modifying the headers
+# For modifying the headers
 (common) {
 	header {
 		-Server
@@ -21,7 +21,7 @@
 	}
 }
 
-// For logging the requests made to the server
+# For logging the requests made to the server
 (logging) {
 	log {
 		output file /var/log/caddy/{args[0]}.access.log
@@ -30,8 +30,8 @@
 	}
 }
 
-//------------------------------------------
-// This part is for authelia
+#------------------------------------------
+# This part is for authelia
 auth.domain.tld {
 	import common
 	import logging catchall
@@ -40,14 +40,13 @@ auth.domain.tld {
 
 (secure) {
 	forward_auth {args[0]} localhost:9091 {
-		uri /api/verify?rd=https://auth.domain.tld
+		uri /api/verify?rd=https:#auth.domain.tld
 		copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
 		header_up Host {upstream_hostport}
 	}
 }
-//------------------------------------------
-
-// Handle invalid requests
+#------------------------------------------
+# Handle invalid requests
 :443 {
 	import common
 	import logging catchall
@@ -56,14 +55,14 @@ auth.domain.tld {
 	}
 }
 
-// Using your certbot certificates
+# Using your certbot certificates
 *.domain.tld {
 	tls /data/certs/fullchain.pem /data/certs/privkey.pem {
 		protocols tls1.3
 	}
 }
 
-// A file server for serving static pages with server side compression and client side caching
+# A file server for serving static pages with server side compression and client side caching
 www.domain.tld {
 	import common
 	root * /var/www/
@@ -81,7 +80,7 @@ www.domain.tld {
 	header @content cache-control max-age=0
 }
 
-// Reverse proxy examples
+# Reverse proxy examples
 subdomain1.domain.tld {
 	import common
 	import logging catchall
