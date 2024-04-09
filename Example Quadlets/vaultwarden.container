@@ -1,0 +1,14 @@
+# vaultwarden.container
+[Container]
+ContainerName=vaultwarden
+Image=registry.hub.docker.com/vaultwarden/server:latest
+AutoUpdate=registry
+NoNewPrivileges=true
+PublishPort=127.0.0.1:8080:80
+Volume=./data:/data
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

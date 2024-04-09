@@ -1,0 +1,15 @@
+# kavita.container
+[Container]
+ContainerName=kavita
+Image=registry.hub.docker.com/jvmilazz0/kavita:latest
+AutoUpdate=registry
+NoNewPrivileges=true
+PublishPort=127.0.0.1:5000:5000
+Volume=./Comics:/manga:ro
+Volume=./config:/kavita/config
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

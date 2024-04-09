@@ -1,0 +1,17 @@
+# audiobookshelf.container
+[Container]
+ContainerName=audiobookshelf
+Image=ghcr.io/advplyr/audiobookshelf:latest
+AutoUpdate=registry
+NoNewPrivileges=true
+PublishPort=127.0.0.1:13378:80
+Volume=./Audiobooks:/Audiobooks
+Volume=./Books:/Books
+Volume=./config:/config
+Volume=./metadata:/metadata
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

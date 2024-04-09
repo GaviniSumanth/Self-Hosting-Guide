@@ -1,0 +1,16 @@
+# caddy.container
+[Container]
+ContainerName=caddy
+Image=registry.hub.docker.com/library/caddy:latest
+AutoUpdate=registry
+Network=host
+Volume=./Caddyfile:/etc/caddy/Caddyfile
+Volume=./site:/var/www/
+Volume=./data:/data
+Volume=./config:/config
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
