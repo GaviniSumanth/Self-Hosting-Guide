@@ -110,7 +110,7 @@ The rest of the steps are the same as that of any other rootless container so go
 
 ### Caddy Configuration
 
-Take a look at the Caddyfile in this repo.
+Take a look at the Caddyfile in this repo to check out how to serve a static page, set up a reverse proxy, logging etc.
 
 ## Running Podman Containers
 
@@ -126,6 +126,8 @@ On Fedora:
 It is pre-installed.
 
 ### Step 2: Create a service user
+
+You can change the SERVICE_USER variable to anything you like.
 
 ```bash
 export SERVICE_USER="podman_user"
@@ -181,7 +183,7 @@ WantedBy=default.target
 ```
 
 The user needs to linger for it to work so:
-
+Run this with sudo from your main user account with sudo privileges
 ```bash
 sudo loginctl enable-linger "${SERVICE_USER}"
 ```
@@ -215,9 +217,9 @@ WantedBy=default.target
 ## Security Recommendations
 
 - Keep the system and containers updated.
-- Use a firewall. I use firewalld through firewall-config's GUI as it allows me to add rich rules throgh a GUI which can be quite useful. If you prefer a simpler alternative then use gufw.
+- Use a firewall. I use firewalld through firewall-config's GUI as it allows me to add rich rules through a GUI which can be quite useful. If you prefer a simpler alternative then use gufw (Uncomplicated Firewall GUI).
 - By default, the ports are published to 0.0.0.0:<PORT_NUMBER>, you may want to change it to 127.0.0.1:<PORT_NUMBER> (localhost) otherwise podman will expose those ports to other systems on the network.
-- Scan your web server for any open ports using online tools or if you are an advanced user you can use nmap. If you are not sure about which online tool to use, I mentioned the one that I use to scan for open ports in the [Resources Section](#resources).
+- Scan your web server for any open ports using online tools or if you are an advanced user you can use nmap from the terminal on another system to check for open ports. If you are not sure about which online tool to use, I mentioned the one that I use to scan for open ports in the [Resources Section](#resources).
 - If you do not intend to access the server through localhost and only use it via the registered domain name through the reverse proxy then remove the PublishPort line from container files (except the reverse proxy's container) and allow communication between the containers by adding all your hosted services and the reverse proxy that you use to a pod.
 - If you want to block connections from certain countries or allow access to your server from certain whitelisted countries, you can use country IP block allocations from IPDeny.com.
 
@@ -227,7 +229,7 @@ WantedBy=default.target
 
 As with any service or application that is exposed to the internet there are some risks involved but they can be mitigated to a great extent if you configure your system and server properly.
 
-Alternatively, you can setup a VPN like Wireguard, Tailscale and Headscale or use Cloudflare Tunnels to access your server remotely but this makes it somewhat harder to use as the user needs to have a client application.
+Alternatively, you can setup a VPN like Wireguard, Tailscale and Headscale to access your server remotely but this makes it somewhat harder to use as the user needs to have a client application otherwise you can use Cloudflare Tunnels.
 
 ### Do I need to register my domain name under a Domain registrar?
 
@@ -249,7 +251,7 @@ I would recommend **caddy** as I think it has the right balance between ease of 
 
 ### I need my server for \<some_task\> so which service or application do I need to host?
 
-Go to **Awesome Selfhosted** and find what you need. The link is in the [Resources Section](#resources)
+Go to **Awesome Selfhosted** and find what you need. The link is in the [Resources Section](#resources).
 
 ### The application I want to host only has a docker-compose.yml file. How can I use it with podman?
 
@@ -265,10 +267,10 @@ Yes, but I would not recommend it. If you create your own SSL records, you will 
 | :----------------------- | :------------: | :------------------------------ |
 | caddy.container          |     Caddy      | Reverse Proxy                   |
 | audiobookshelf.container | Audiobookshelf | Audiobook and E-book Management |
-| kavita.container         |     Kavita     | Comics                          |
+| kavita.container         |     Kavita     | E-books and Comics              |
 | vaultwarden.container    |  Vaultwarden   | Password Management             |
 
-You can use the quadlets in this repo directly but I suggest you use it after you make the appropriate changes such as changing the volume mounts and port numbers.
+You can use the quadlets in this repo directly but I suggest you use it after you make the appropriate changes such as changing the volume mounts and exposed port numbers.
 
 ## Resources
 
