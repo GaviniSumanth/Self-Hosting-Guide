@@ -152,14 +152,23 @@ sudo usermod \
 sudo -H -u "${SERVICE_USER}" bash -c 'cd; bash'
 ```
 
-### Step 5: Allow the service user to access the bus
+### Step 5: Enable Linger for the service user
+
+Run this with sudo from your main user account with sudo privileges
+
+```bash
+sudo loginctl enable-linger "${SERVICE_USER}"
+```
+
+
+### Step 6: Allow the service user to access the bus
 
 ```bash
 echo "export XDG_RUNTIME_DIR=/run/user/$(id -u)" > ~/.bashrc
 source ~/.bashrc
 ```
 
-### Step 6: Run the Quadlet container
+### Step 7: Run the Quadlet container
 
 Place the quadlet container files in the user's systemd directory.
 
@@ -173,19 +182,13 @@ Reload the systemd daemon
 systemctl --user daemon-reload
 ```
 
-### Step 7: Auto start container on boot
+### Step 8: Auto start container on boot
 
-Add this snippet to your container files
+Add this snippet to your container files to enable auto-start on boot
 
 ```ini
 [Install]
 WantedBy=default.target
-```
-
-The user needs to linger for it to work so:
-Run this with sudo from your main user account with sudo privileges
-```bash
-sudo loginctl enable-linger "${SERVICE_USER}"
 ```
 
 ## Quadlet Container Example
