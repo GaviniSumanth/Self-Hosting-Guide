@@ -272,6 +272,7 @@ Yes, but I would not recommend it. If you create your own SSL records, you will 
 | audiobookshelf.container | Audiobookshelf | Audiobook and E-book Management |
 | kavita.container         |     Kavita     | E-books and Comics              |
 | vaultwarden.container    |  Vaultwarden   | Password Management             |
+| duckdns.container        |    DuckDNS     | Updates your duckDNS IP         |
 
 You can use the quadlets in this repo directly but I suggest you use it after you make the appropriate changes such as changing the volume mounts and exposed port numbers.
 
