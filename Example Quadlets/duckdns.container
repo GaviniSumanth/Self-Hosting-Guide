@@ -1,0 +1,14 @@
+# duckdns.container
+[Container]
+ContainerName=duckdns
+Environment=PUID=1000 PGID=1000 TZ=Asia/Kolkata SUBDOMAINS=domaintld TOKEN=top_secret_token LOG_FILE=false
+Image=lscr.io/linuxserver/duckdns:latest
+AutoUpdate=registry
+Network=host
+Volume=./config:/config
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target default.target
