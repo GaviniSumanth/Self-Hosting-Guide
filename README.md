@@ -146,20 +146,17 @@ sudo usermod \
   "${SERVICE_USER}"
 ```
 
-### Step 4: Switch to the System User
-
-```bash
-sudo -H -u "${SERVICE_USER}" bash -c 'cd; bash'
-```
-
-### Step 5: Enable Linger for the service user
-
-Run this with sudo from your main user account with sudo privileges
+### Step 4: Enable Linger for the service user
 
 ```bash
 sudo loginctl enable-linger "${SERVICE_USER}"
 ```
 
+### Step 5: Switch to the System User
+
+```bash
+sudo -H -u "${SERVICE_USER}" bash -c 'cd; bash'
+```
 
 ### Step 6: Allow the service user to access the bus
 
